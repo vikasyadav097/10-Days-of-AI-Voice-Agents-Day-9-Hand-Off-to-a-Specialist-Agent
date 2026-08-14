@@ -12,6 +12,7 @@ from livekit.agents import (
     JobProcess,
     cli,
     function_tool,
+    RunContext,
     inference,
     tokenize,
     room_io,
@@ -33,22 +34,13 @@ load_dotenv(".env.local")
 
 # ============================================================
 #   LEARNMATE MEMORY
-#   Simple JSON-file-based persistence for learner profiles.
-#   No database needed — this is a lightweight key-value store
-#   keyed by learner name, used across sessions to recognize
-#   returning learners and resume their progress.
 # ============================================================
 
 MEMORY_FILE = Path(__file__).parent / "learner_memory.json"
 
 
 def load_memory() -> dict:
-    """Load learner memory from the local JSON file.
-
-    Returns an empty learners list if the file is missing or
-    corrupted, so the agent can always fall back gracefully
-    instead of crashing on startup.
-    """
+    """Load learner memory from the local JSON file."""
 
     if not MEMORY_FILE.exists():
         return {"learners": []}
@@ -58,19 +50,12 @@ def load_memory() -> dict:
             return json.load(file)
 
     except (json.JSONDecodeError, OSError):
-        # File exists but is unreadable/corrupt (bad JSON, permissions,
-        # etc.) — log it and continue with a fresh, empty memory store
-        # rather than letting the whole agent crash.
         logger.warning("Could not read learner memory.")
         return {"learners": []}
 
 
 def write_memory(data: dict) -> None:
-    """Save learner memory to the local JSON file.
-
-    Overwrites the file with the full, current in-memory dataset
-    (indent=2 keeps it human-readable for debugging).
-    """
+    """Save learner memory to the local JSON file."""
 
     with open(MEMORY_FILE, "w", encoding="utf-8") as file:
         json.dump(
@@ -83,11 +68,6 @@ def write_memory(data: dict) -> None:
 
 # ============================================================
 # LEARNMATE SYSTEM PROMPT
-# The full persona + behavior contract for the tutor agent.
-# Everything below (identity, teaching style, memory rules,
-# guardrails, escalation flow) is defined here in plain
-# instructions rather than in code, so behavior can be tuned
-# without touching the Python logic.
 # ============================================================
 
 SYSTEM_PROMPT = """
@@ -479,14 +459,105 @@ Start every new conversation with:
 
 "Hi Vikas, how are you? I'm LearnMate, your learning companion.
 What would you like to learn today?" 
+
+
+DAY 9 — SPECIALIST HANDOFF
+
+You have access to a Maths Practice Specialist through the
+transfer_to_math_specialist tool.
+
+Use the specialist when:
+- the learner explicitly asks for a maths specialist or tutor;
+- the learner wants a dedicated maths practice session;
+- the learner asks for exam-style maths practice or focused drills;
+- the learner wants focused step-by-step maths coaching.
+
+Do NOT hand off every normal maths question. Answer simple maths
+questions yourself.
+
+Before calling the handoff tool, clearly tell the learner that you
+are connecting them to the Maths Practice Specialist.
+
+Example:
+"I can help with that, but for focused maths practice I'll connect
+you with our Maths Practice Specialist."
+
+After the handoff, the specialist continues the same conversation.
+The learner should not need to repeat their problem.
+
 """
+
+
+
+# ============================================================
+# DAY 9 – MATHS PRACTICE SPECIALIST
+# ============================================================
+
+MATHS_SPECIALIST_PROMPT = """
+You are LearnMate's Maths Practice Specialist.
+
+Your only job is focused mathematics practice. You take over when
+the learner wants dedicated maths practice, an exercise, exam-style
+drill, or focused step-by-step maths coaching.
+
+You have received the conversation from LearnMate. Do not ask the
+learner to repeat information that is already in the conversation.
+
+On your first response, briefly introduce yourself:
+"I'm your Maths Practice Specialist. Let's work through this together."
+
+Then continue naturally from the existing maths request.
+
+TEACHING STYLE
+- Be patient, clear, and encouraging.
+- Explain reasoning step by step.
+- Break difficult problems into smaller steps.
+- Let the learner attempt a step before revealing the final answer,
+  unless they explicitly ask for the answer.
+- Verify calculations before giving the final answer.
+- Ask one short question at a time.
+- Keep spoken responses concise.
+- Adapt to the learner's level.
+- Mirror the learner's language: English, Hindi, or natural Hinglish.
+
+SPECIALIST LIMITS
+- Focus on mathematics.
+- If the learner asks about an unrelated subject, explain that you
+  specialize in maths and suggest returning to LearnMate.
+- Never invent a mathematical result.
+- Never claim to be a certified teacher.
+- Never diagnose learning disabilities or medical conditions.
+
+PRACTICE FLOW
+1. Understand the maths problem or goal.
+2. Identify the learner's level when useful.
+3. Explain the relevant idea simply.
+4. Work through one step at a time.
+5. Ask the learner to try the next step.
+6. Correct mistakes gently and explain why.
+7. Give a short practice question when appropriate.
+"""
+
+
+class MathsSpecialistAgent(Agent):
+    def __init__(self, chat_ctx=None) -> None:
+        super().__init__(
+            instructions=MATHS_SPECIALIST_PROMPT,
+            chat_ctx=chat_ctx,
+        )
+
+    async def on_enter(self) -> None:
+        self.session.generate_reply(
+            instructions=(
+                "Introduce yourself briefly as the Maths Practice Specialist, "
+                "then continue with the learner's existing maths request. "
+                "Do not ask them to repeat information already present."
+            )
+        )
 
 
 # ============================================================
 # LEARNMATE AGENT
-# The Agent subclass LiveKit instantiates for each session.
-# Wires the SYSTEM_PROMPT persona to the two function tools
-# below (learner lookup/save) that the LLM can call mid-conversation.
 # ============================================================
 
 class Assistant(Agent):
@@ -494,6 +565,36 @@ class Assistant(Agent):
     def __init__(self) -> None:
         super().__init__(
             instructions=SYSTEM_PROMPT
+        )
+
+
+    # ========================================================
+    # DAY 9 – HANDOFF TO MATHS SPECIALIST
+    # ========================================================
+
+    @function_tool
+    async def transfer_to_math_specialist(self, context: RunContext):
+        """
+        Hand off to the Maths Practice Specialist.
+
+        Use this when the learner explicitly asks for a maths
+        specialist, dedicated maths practice, exam-style maths
+        practice, or focused step-by-step maths coaching.
+
+        Do not use this for every simple maths question.
+        """
+
+        logger.info("Handing off to Maths Practice Specialist.")
+
+        # Preserve the existing conversation so the learner does not
+        # have to explain the full problem again.
+        specialist = MathsSpecialistAgent(
+            chat_ctx=self.chat_ctx.copy()
+        )
+
+        return (
+            specialist,
+            "Transferring you to the Maths Practice Specialist.",
         )
 
     # ========================================================
@@ -560,8 +661,7 @@ class Assistant(Agent):
         """
 
         # ----------------------------------------------------
-        # Privacy check — refuse to persist anything unless the
-        # LLM has confirmed the learner explicitly said yes.
+        # Privacy check
         # ----------------------------------------------------
 
         if not permission_to_save:
@@ -580,8 +680,7 @@ class Assistant(Agent):
             }
 
         # ----------------------------------------------------
-        # Load existing memory so we can merge into it instead
-        # of overwriting other learners' saved records.
+        # Load existing memory
         # ----------------------------------------------------
 
         data = load_memory()
@@ -598,9 +697,7 @@ class Assistant(Agent):
         name_lower = name.strip().lower()
 
         # ----------------------------------------------------
-        # If this learner already has a record, merge the new
-        # fields into it (spread + overwrite) instead of adding
-        # a duplicate entry.
+        # Update existing learner
         # ----------------------------------------------------
 
         for index, learner in enumerate(
@@ -635,8 +732,7 @@ class Assistant(Agent):
                 }
 
         # ----------------------------------------------------
-        # No existing record matched — this is a first-time
-        # learner, so append a brand-new entry.
+        # Add new learner
         # ----------------------------------------------------
 
         data.setdefault("learners", []).append(
@@ -661,8 +757,6 @@ class Assistant(Agent):
 
 # ============================================================
 # LIVEKIT SERVER
-# Entry point that LiveKit's CLI/worker uses to register and
-# run this agent.
 # ============================================================
 
 server = AgentServer()
@@ -670,9 +764,6 @@ server = AgentServer()
 
 # ============================================================
 # PREWARM
-# Runs once per worker process before any jobs are handled, so
-# the (relatively slow) VAD model is loaded ahead of time and
-# reused across sessions instead of reloading it per call.
 # ============================================================
 
 def prewarm(proc: JobProcess):
@@ -685,8 +776,6 @@ server.setup_fnc = prewarm
 
 # ============================================================
 # LIVEKIT AGENT SESSION
-# Called once per incoming room/job — builds the voice pipeline
-# and starts the tutoring session for that participant.
 # ============================================================
 
 @server.rtc_session(agent_name="my-agent")
@@ -709,7 +798,6 @@ async def my_agent(ctx: JobContext):
 
         # ----------------------------------------------------
         # Speech-to-Text
-        # Deepgram converts the learner's spoken audio to text.
         # ----------------------------------------------------
 
         stt=deepgram.STT(
@@ -718,8 +806,6 @@ async def my_agent(ctx: JobContext):
 
         # ----------------------------------------------------
         # Large Language Model
-        # Gemini generates LearnMate's replies based on the
-        # SYSTEM_PROMPT and the ongoing conversation.
         # ----------------------------------------------------
 
         llm=google.LLM(
@@ -728,8 +814,6 @@ async def my_agent(ctx: JobContext):
 
         # ----------------------------------------------------
         # Text-to-Speech
-        # Murf turns the LLM's text reply back into natural
-        # speech audio using an Indian-English voice.
         # ----------------------------------------------------
 
         tts=murf.TTS(
@@ -744,9 +828,6 @@ async def my_agent(ctx: JobContext):
         # ----------------------------------------------------
         # Voice Activity Detection
         # + Turn Detection
-        # Decides when the learner has started/stopped speaking
-        # and when it's the agent's turn to respond, across
-        # multiple languages.
         # ----------------------------------------------------
 
         turn_detection=MultilingualModel(),
@@ -755,8 +836,6 @@ async def my_agent(ctx: JobContext):
 
         # ----------------------------------------------------
         # Generate responses while waiting for end of turn
-        # Lets the LLM start drafting a reply before the
-        # learner has fully finished speaking, to cut latency.
         # ----------------------------------------------------
 
         preemptive_generation=True,
@@ -764,9 +843,6 @@ async def my_agent(ctx: JobContext):
 
     # ========================================================
     # START VOICE SESSION
-    # Attaches the Assistant persona to this session and joins
-    # the LiveKit room, picking noise cancellation tuned for
-    # SIP (telephony) vs. regular WebRTC participants.
     # ========================================================
 
     await session.start(
@@ -799,9 +875,8 @@ async def my_agent(ctx: JobContext):
 
 # ============================================================
 # RUN APPLICATION
-# Standard LiveKit CLI bootstrap — starts the worker process
-# that listens for and dispatches jobs to my_agent().
 # ============================================================
 
 if __name__ == "__main__":
     cli.run_app(server)
+    
