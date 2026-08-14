@@ -1,0 +1,380 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@source "../node_modules/streamdown/dist/index.js";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --radius: 0.625rem;
+
+  /* Dark Tech / AI Background */
+  --background: oklch(0.08 0.02 250);
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.11 0.025 250);
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.11 0.025 250);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.7 0.16 270);
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.16 0.025 250);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.16 0.025 250);
+  --muted-foreground: oklch(0.7 0.02 250);
+
+  --accent: oklch(0.18 0.04 260);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.577 0.245 27.325);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.7 0.16 270);
+
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+
+  --sidebar: oklch(0.09 0.02 250);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.7 0.16 270);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.16 0.025 250);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.7 0.16 270);
+}
+
+.dark {
+  --background: oklch(0.08 0.02 250);
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.11 0.025 250);
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.11 0.025 250);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.7 0.16 270);
+  --primary-foreground: oklch(0.985 0 0);
+
+  --secondary: oklch(0.16 0.025 250);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.16 0.025 250);
+  --muted-foreground: oklch(0.7 0.02 250);
+
+  --accent: oklch(0.18 0.04 260);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.704 0.191 22.216);
+
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 12%);
+  --ring: oklch(0.7 0.16 270);
+
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  --sidebar: oklch(0.09 0.02 250);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.7 0.16 270);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.16 0.025 250);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.7 0.16 270);
+}
+
+@theme inline {
+  --font-sans:
+    var(--font-public-sans),
+    ui-sans-serif,
+    system-ui,
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+
+  --font-mono:
+    var(--font-commit-mono),
+    ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Monaco,
+    Consolas,
+    'Liberation Mono',
+    'Courier New',
+    monospace;
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+
+  --color-destructive: var(--destructive);
+
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-foreground/20 outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+
+    background:
+      radial-gradient(
+        circle at 50% 20%,
+        oklch(0.22 0.08 270 / 0.45),
+        transparent 35%
+      ),
+      radial-gradient(
+        circle at 10% 80%,
+        oklch(0.18 0.06 230 / 0.35),
+        transparent 30%
+      ),
+      radial-gradient(
+        circle at 90% 70%,
+        oklch(0.18 0.07 300 / 0.3),
+        transparent 30%
+      ),
+      oklch(0.06 0.015 250);
+
+    background-attachment: fixed;
+  }
+}
+
+/* Subtle tech-grid effect */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.08;
+
+  background-image:
+    linear-gradient(
+      oklch(0.8 0.02 250 / 0.15) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      oklch(0.8 0.02 250 / 0.15) 1px,
+      transparent 1px
+    );
+
+  background-size: 45px 45px;
+  mask-image: linear-gradient(to bottom, black, transparent 90%);
+}
+body {
+  position: relative;
+  overflow-x: hidden;
+  background:
+    radial-gradient(circle at 50% 35%, rgba(99, 102, 241, 0.16), transparent 32%),
+    radial-gradient(circle at 15% 80%, rgba(14, 165, 233, 0.10), transparent 28%),
+    radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.10), transparent 28%),
+    #020617;
+}
+
+/* Subtle tech grid */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  background-image:
+    linear-gradient(rgba(99, 102, 241, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.045) 1px, transparent 1px);
+
+  background-size: 45px 45px;
+
+  mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    rgba(0, 0, 0, 0.7) 55%,
+    transparent 100%
+  );
+}
+
+/* Floating tech emojis */
+body::after {
+  content: "🤖     ⚡          🧠          💻     🎙️          ☁️       🔊          AI     ⚙️";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  line-height: 7;
+  letter-spacing: 18px;
+  word-spacing: 28px;
+
+  opacity: 0.08;
+  transform: rotate(-8deg) scale(1.25);
+
+  filter: blur(0.2px);
+}
+
+/* Keep the actual app above the decorative background */
+body > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Tech-style glow around the main voice area */
+button {
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    filter 0.2s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 20px rgba(129, 140, 248, 0.35),
+    0 0 45px rgba(99, 102, 241, 0.15);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+/* Small responsive adjustment */
+@media (max-width: 640px) {
+  body::after {
+    font-size: 18px;
+    letter-spacing: 8px;
+    word-spacing: 14px;
+  }
+}
+
+/* Remove the black rectangular band behind the LiveKit voice UI */
+main {
+  background: transparent !important;
+}
+
+main > div {
+  background: transparent !important;
+}
+
+main > div > * {
+  background: transparent !important;
+}
+
+/* =========================================================
+   REMOVE LIVEKIT BLACK BACKGROUND / STRIP
+   ========================================================= */
+
+/* Main application area */
+main,
+main > div,
+main > div > div,
+main > div > div > div {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* LiveKit / starter UI background classes */
+main [class*="bg-black"],
+main [class*="bg-background"],
+main [class*="bg-card"],
+main [class*="bg-muted"],
+main [class*="bg-popover"] {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* Remove any inline black background */
+main [style*="background"],
+main [style*="background-color"] {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+/* IMPORTANT:
+   Keep the actual Start Talking button visible */
+main button {
+  background-color: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+}
+
+/* Don't let any LiveKit wrapper create a separate full-width panel */
+main section,
+main article {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* Preserve tech background behind everything */
+body {
+  background:
+    radial-gradient(
+      circle at 50% 35%,
+      rgba(99, 102, 241, 0.16),
+      transparent 32%
+    ),
+    radial-gradient(
+      circle at 15% 80%,
+      rgba(14, 165, 233, 0.10),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 85% 75%,
+      rgba(168, 85, 247, 0.10),
+      transparent 28%
+    ),
+    #020617 !important;
+}

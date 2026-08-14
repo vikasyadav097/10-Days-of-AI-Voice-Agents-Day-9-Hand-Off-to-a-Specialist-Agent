@@ -1,0 +1,194 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "topic": "Python",
+      "level": "beginner",
+      "question": "What is the difference between a list and a tuple in Python?",
+      "answer": "A list is mutable, while a tuple is immutable."
+    },
+    {
+      "id": 2,
+      "topic": "Python",
+      "level": "intermediate",
+      "question": "What is a Python decorator?",
+      "answer": "A decorator is a function that modifies or extends the behavior of another function."
+    },
+    {
+      "id": 3,
+      "topic": "Data Structures",
+      "level": "intermediate",
+      "question": "What is the time complexity of searching in a balanced binary search tree?",
+      "answer": "O(log n)."
+    },
+    {
+      "id": 4,
+      "topic": "Algorithms",
+      "level": "intermediate",
+      "question": "What is the main idea behind binary search?",
+      "answer": "Binary search repeatedly divides a sorted search space in half."
+    },
+    {
+      "id": 5,
+      "topic": "DBMS",
+      "level": "beginner",
+      "question": "What is a primary key in a database?",
+      "answer": "A primary key uniquely identifies each record in a table."
+    },
+    {
+      "id": 6,
+      "topic": "Operating Systems",
+      "level": "beginner",
+      "question": "What is the main purpose of an operating system?",
+      "answer": "It manages computer hardware and provides services for applications."
+    },
+    {
+      "id": 7,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What does IP stand for in computer networking?",
+      "answer": "Internet Protocol."
+    },
+    {
+      "id": 8,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is a computer network?",
+      "answer": "A computer network is a group of connected devices that can communicate and share resources."
+    },
+    {
+      "id": 9,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is the difference between LAN and WAN?",
+      "answer": "LAN covers a small geographic area, while WAN connects networks across larger geographic areas."
+    },
+    {
+      "id": 10,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is a router?",
+      "answer": "A router is a networking device that forwards data packets between different networks."
+    },
+    {
+      "id": 11,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is a switch?",
+      "answer": "A switch connects devices within a network and forwards data to the appropriate device."
+    },
+    {
+      "id": 12,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is a MAC address?",
+      "answer": "A MAC address is a unique hardware address assigned to a network interface."
+    },
+    {
+      "id": 13,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is DNS?",
+      "answer": "DNS stands for Domain Name System and translates domain names into IP addresses."
+    },
+    {
+      "id": 14,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is HTTP?",
+      "answer": "HTTP stands for Hypertext Transfer Protocol and is used for communication between web clients and servers."
+    },
+    {
+      "id": 15,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is HTTPS?",
+      "answer": "HTTPS is the secure version of HTTP that uses encryption to protect data exchanged between a client and server."
+    },
+    {
+      "id": 16,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is an IP address used for?",
+      "answer": "An IP address identifies a device or network interface and helps route data to the correct destination."
+    },
+    {
+      "id": 17,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is the difference between IPv4 and IPv6?",
+      "answer": "IPv4 uses 32-bit addresses, while IPv6 uses 128-bit addresses and provides a much larger address space."
+    },
+    {
+      "id": 18,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is a network protocol?",
+      "answer": "A network protocol is a set of rules that defines how devices communicate and exchange data."
+    },
+    {
+      "id": 19,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is a packet in computer networking?",
+      "answer": "A packet is a small unit of data transmitted across a network."
+    },
+    {
+      "id": 20,
+      "topic": "Computer Networks",
+      "level": "beginner",
+      "question": "What is the purpose of a subnet mask?",
+      "answer": "A subnet mask determines which portion of an IP address represents the network and which portion represents the host."
+    },
+    {
+      "id": 21,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What is the difference between TCP and UDP?",
+      "answer": "TCP is connection-oriented and provides reliable delivery, while UDP is connectionless and focuses on speed with no guarantee of delivery."
+    },
+    {
+      "id": 22,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What is the TCP three-way handshake?",
+      "answer": "It is the process used to establish a TCP connection using SYN, SYN-ACK, and ACK messages."
+    },
+    {
+      "id": 23,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What is a port number?",
+      "answer": "A port number identifies a specific application or service on a device and helps direct network traffic to it."
+    },
+    {
+      "id": 24,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What is DHCP?",
+      "answer": "DHCP stands for Dynamic Host Configuration Protocol and automatically assigns network configuration such as IP addresses to devices."
+    },
+    {
+      "id": 25,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What is the OSI model?",
+      "answer": "The OSI model is a seven-layer framework used to understand and describe how network communication works."
+    },
+    {
+      "id": 26,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What are the seven layers of the OSI model?",
+      "answer": "The seven layers are Physical, Data Link, Network, Transport, Session, Presentation, and Application."
+    },
+    {
+      "id": 27,
+      "topic": "Computer Networks",
+      "level": "intermediate",
+      "question": "What is the purpose of the transport layer?",
+      "answer": "The transport layer provides end-to-end communication between applications and can provide reliability, flow control, and error recovery."
+    }
+  ]
+}
+
