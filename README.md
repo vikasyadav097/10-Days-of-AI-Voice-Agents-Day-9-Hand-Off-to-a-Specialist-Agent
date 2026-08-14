@@ -1,320 +1,290 @@
+# 🧮 Day 9 – Hand Off to a Specialist Agent
 
-# 📊 Day 8 – Build a Call Analytics Dashboard
-
-> Giving LearnMate a dashboard to understand how its voice conversations are performing.
+> Teaching LearnMate to recognise when a focused problem should be handled by a dedicated specialist agent.
 
 Part of **10 Days of Voice Agents – Voice for Bharat Edition** 🚀
 
-Day 7 taught LearnMate when it should stop trying to solve everything itself and ask for human help.
+Day 8 focused on analysing LearnMate's call performance through a call analytics dashboard.
 
-Day 8 focuses on **call analytics** — giving LearnMate a simple dashboard where I can monitor voice sessions and understand whether learning conversations successfully achieved their objective.
-
----
-
-# 🎯 Day 8 Objective
-
-For Day 8, I upgraded **LearnMate**, my Learning & Literacy voice assistant, with a call analytics dashboard.
-
-The dashboard provides a simple overview of voice learning sessions and tracks whether each call successfully achieved its defined objective.
-
-LearnMate can now:
-
-- 📞 Track total voice calls
-- ✅ Track successful calls
-- ❌ Track unsuccessful calls
-- 📈 Calculate the overall success rate
-- 📋 Display recent learning sessions
-- 🧠 Show learning-related call outcomes
-- 🔐 Keep sensitive caller information out of the dashboard
+For **Day 9**, I extended LearnMate with a **specialist agent** for mathematics practice. Instead of making the main learning agent responsible for every type of question, LearnMate can now hand a mathematics-focused conversation to a dedicated **Maths Practice Specialist**.
 
 ---
 
-# 🎯 What Does a Successful Call Mean?
+## 🎯 Day 9 Objective
 
-For the **Learning & Literacy** track, I defined a successful call as:
+For Day 9, I added an agent handoff system to **LearnMate**, my Learning & Literacy voice assistant.
 
-> **The learner successfully completes the intended learning interaction or achieves the objective of the conversation.**
+The main agent can now:
 
-For example:
+- 🧠 Recognise when a learner needs focused mathematics assistance
+- 🧮 Route mathematics questions to a dedicated specialist
+- 🗣️ Clearly announce the handoff to the learner
+- 🔄 Transfer the conversation without making the learner repeat the entire problem
+- 📚 Preserve relevant conversation context
+- 🎯 Keep the specialist focused on mathematics practice
+
+The goal is simple:
+
+> **One agent does not need to be an expert at everything.**
+
+---
+
+# 🧮 Maths Practice Specialist
+
+For the Learning & Literacy track, I selected **Maths Practice Specialist** as the specialist agent.
+
+The specialist has one focused responsibility:
+
+> Help learners understand and practise mathematics.
+
+It can assist with:
+
+- ➗ Arithmetic
+- 📐 Algebra
+- 📊 Basic statistics
+- 📈 Functions
+- 📏 Geometry
+- 🧮 Equations and inequalities
+- 📝 Practice questions
+- 🧠 Step-by-step problem solving
+
+The main LearnMate agent continues handling general learning conversations and only performs a handoff when focused mathematics assistance is required.
+
+---
+
+# 🔄 Agent Handoff Flow
+
+```text
+                    Learner
+                       │
+                       ▼
+                LearnMate Main Agent
+                       │
+                       ▼
+              Understand the Request
+                       │
+             ┌─────────┴─────────┐
+             │                   │
+       General Learning      Maths Request
+             │                   │
+             ▼                   ▼
+       Main Agent Answers   Announce Handoff
+                                   │
+                                   ▼
+                         Maths Specialist Agent
+                                   │
+                                   ▼
+                          Continue Conversation
+                                   │
+                                   ▼
+                         Solve / Explain Maths
+````
+
+---
+
+# 🗣️ Handoff Example
+
+### Normal Learning Question
 
 ```text
 Learner:
 "What is an IP address?"
 
 LearnMate:
-Explains the concept and provides an example.
+"An IP address is a unique address used to identify
+a device on a network. Would you like an example?"
+```
 
+The main agent handles the request because it does not require the Maths Specialist.
+
+---
+
+### Mathematics Question
+
+```text
 Learner:
-"Okay, now I understand it."
+"I need help solving a quadratic equation."
 
-→ Successful Call
-````
+LearnMate:
+"This is a focused mathematics problem.
+I'll connect you with our Maths Specialist."
 
-A call can be unsuccessful when the learner does not complete the intended objective.
+Maths Specialist:
+"Hi! I'm LearnMate's Maths Practice Specialist.
+I can help you solve the equation step by step."
+```
+
+The conversation is handed off to the specialist.
+
+---
+
+# 🧠 Context Preservation
+
+An important part of the handoff is maintaining the learner's context.
+
+The learner should not have to explain the entire problem again after the specialist takes over.
 
 For example:
 
 ```text
 Learner:
-"I don't understand this and I want to stop."
+"I'm preparing for an exam and I'm struggling with quadratic equations."
 
-→ Unsuccessful Call
+LearnMate:
+"I can help you understand quadratic equations.
+What part are you finding difficult?"
+
+Learner:
+"I understand the concept, but I need help solving this problem."
+
+LearnMate:
+"This is a focused mathematics problem.
+I'll connect you with our Maths Specialist."
+
+Maths Specialist:
+"Sure. I know you're working on quadratic equations.
+Let's solve the problem step by step."
 ```
 
-An unsuccessful call does **not necessarily mean the system failed technically**.
-
-It simply means the defined success condition was not achieved.
+The specialist continues from the existing conversation instead of restarting the interaction.
 
 ---
 
-# 📊 Call Analytics Dashboard
+# 🛠️ Handoff Tool
 
-The dashboard displays four important metrics:
+The main agent uses a dedicated handoff mechanism to transfer the conversation to the Maths Specialist.
 
-| Metric               | Description                                      |
-| -------------------- | ------------------------------------------------ |
-| 📞 Total Calls       | Total number of voice learning sessions          |
-| ✅ Successful Calls   | Calls where the learning objective was completed |
-| ❌ Unsuccessful Calls | Calls where the objective was not completed      |
-| 📈 Success Rate      | Percentage of successful calls                   |
+Conceptually, the handoff is triggered through:
 
-The dashboard provides a quick way to understand how LearnMate is performing.
-
----
-
-# 📈 Success Rate
-
-The success rate represents the percentage of successful conversations.
-
-```text
-Success Rate =
-Successful Calls / Total Calls × 100
+```python
+transfer_to_maths_specialist()
 ```
 
-For example:
+The tool description clearly tells the main agent when it should be used.
 
-```text
-Total Calls       → 20
-Successful Calls  → 15
-Unsuccessful      → 5
+The main agent should hand off when:
 
-Success Rate      → 75%
-```
+* The learner explicitly asks for mathematics help
+* The problem requires focused mathematical reasoning
+* The learner wants mathematics practice
+* A dedicated maths explanation would provide a better experience
 
-This makes it easier to understand the overall performance of the voice agent.
-
----
-
-# 🔄 Call Analytics Flow
-
-```text
-                    Learner
-                       │
-                       ▼
-                Start Voice Call
-                       │
-                       ▼
-                 LearnMate Agent
-                       │
-                       ▼
-              Learning Conversation
-                       │
-                       ▼
-              Did the call achieve
-               its objective?
-                       │
-              ┌────────┴────────┐
-              │                 │
-             Yes               No
-              │                 │
-              ▼                 ▼
-         Successful        Unsuccessful
-              │                 │
-              └────────┬────────┘
-                       │
-                       ▼
-                 Call Statistics
-                       │
-                       ▼
-              Analytics Dashboard
-                       │
-                       ▼
-        Total • Successful • Failed
-                    • Rate
-```
+The main agent should **not** hand off for unrelated or general learning questions.
 
 ---
 
-# 🖥️ Dashboard Features
+# 🧑‍🏫 Specialist Responsibilities
 
-The LearnMate dashboard contains:
+## The Maths Specialist CAN:
 
-### 📞 Total Calls
+* ✅ Explain mathematical concepts
+* ✅ Solve mathematics problems step by step
+* ✅ Give practice questions
+* ✅ Explain mistakes
+* ✅ Identify common misconceptions
+* ✅ Ask clarifying questions
+* ✅ Adapt explanations to the learner's level
+* ✅ Continue using the context provided during handoff
 
-Shows the total number of voice sessions.
+## The Maths Specialist SHOULD NOT:
 
-### ✅ Successful Calls
-
-Shows how many conversations achieved their learning objective.
-
-### ❌ Unsuccessful Calls
-
-Shows conversations where the intended objective was not completed.
-
-### 📈 Success Rate
-
-Shows the overall percentage of successful conversations.
+* ❌ Handle unrelated technical requests
+* ❌ Pretend to be a human teacher
+* ❌ Claim capabilities it does not have
+* ❌ Take over normal conversations unnecessarily
+* ❌ Perform tasks outside its mathematics role
 
 ---
 
-# 📋 Recent Sessions
+# 🔐 Clear Handoff for the Learner
 
-The dashboard also provides a simple view of recent learning sessions.
+The handoff should never happen silently.
+
+Before transferring the conversation, LearnMate clearly tells the learner what is happening.
 
 Example:
 
 ```text
-🧠 Python Practice
-Today
-        ✅ Successful
+LearnMate:
 
-
-🧠 Computer Networks
-Today
-        ✅ Successful
-
-
-🧠 Data Structures
-Yesterday
-        ❌ Unsuccessful
-
-
-🧠 Algorithms
-Yesterday
-        ✅ Successful
+"This looks like a focused mathematics problem.
+I'll connect you with our Maths Specialist so we
+can work through it step by step."
 ```
 
-This makes it easier to understand what types of learning conversations are happening.
+The specialist then introduces itself:
 
----
+```text
+Maths Specialist:
 
-# 🧠 LearnMate Learning Analytics
+"Hi! I'm the Maths Practice Specialist.
+Let's continue from where you left off."
+```
 
-The dashboard is designed around the Learning & Literacy use case.
-
-It can be used to monitor conversations such as:
-
-* 🐍 Python
-* 🧮 Data Structures
-* 🌐 Computer Networks
-* 🗄️ DBMS
-* ⚡ Algorithms
-* 💻 Computer Science concepts
-
-The goal is not just to count calls, but to understand whether the learner actually achieved the intended outcome.
-
----
-
-# 🔐 Privacy & Safety
-
-The dashboard is intentionally designed to avoid exposing sensitive learner information.
-
-### Dashboard CAN show:
-
-* ✅ Total call count
-* ✅ Successful call count
-* ✅ Unsuccessful call count
-* ✅ Success rate
-* ✅ General learning topic
-* ✅ Call outcome
-* ✅ Basic session information
-
-### Dashboard MUST NOT show:
-
-* ❌ Passwords
-* ❌ OTPs
-* ❌ PINs
-* ❌ Account numbers
-* ❌ Medical information
-* ❌ Sensitive personal information
-* ❌ Full conversation transcripts
-
-The dashboard focuses on **analytics rather than exposing private conversations**.
+This makes the transition clear and natural.
 
 ---
 
 # 🏗️ Architecture
 
 ```text
-                       LearnMate
-                          │
-                          ▼
-                   Voice Conversation
-                          │
-                          ▼
-                       LiveKit
-                          │
-                          ▼
-                    Agent Processing
-                          │
-                          ▼
-                  Determine Call Outcome
-                          │
-             ┌────────────┴────────────┐
-             │                         │
-        Successful                 Unsuccessful
-             │                         │
-             └────────────┬────────────┘
-                          │
-                          ▼
-                    Call Statistics
-                          │
-                          ▼
-                 Next.js Dashboard
-                          │
-                          ▼
-             ┌─────────────────────────┐
-             │      CALL ANALYTICS    │
-             │                         │
-             │ 📞 Total Calls          │
-             │ ✅ Successful           │
-             │ ❌ Unsuccessful         │
-             │ 📈 Success Rate         │
-             └─────────────────────────┘
+                         LearnMate
+                            │
+                            ▼
+                    Main Voice Agent
+                            │
+                            ▼
+                   Request Classification
+                            │
+              ┌─────────────┴─────────────┐
+              │                           │
+        General Learning             Maths Request
+              │                           │
+              ▼                           ▼
+        Main Agent Answer           Handoff Message
+                                          │
+                                          ▼
+                          transfer_to_maths_specialist()
+                                          │
+                                          ▼
+                              Maths Specialist Agent
+                                          │
+                                          ▼
+                              Mathematics Assistance
 ```
 
 ---
 
 # 🛠️ Tech Stack
 
-| Component       | Technology         |
-| --------------- | ------------------ |
-| Voice Agent     | LiveKit Agents     |
-| LLM             | Google Gemini      |
-| Speech-to-Text  | Deepgram           |
-| Text-to-Speech  | Murf Falcon        |
-| Frontend        | Next.js            |
-| UI              | React + TypeScript |
-| Styling         | Tailwind CSS       |
-| Voice Transport | LiveKit            |
-| Analytics UI    | Next.js / React    |
+| Component        | Technology                |
+| ---------------- | ------------------------- |
+| Voice Agent      | LiveKit Agents            |
+| Main Agent       | LearnMate                 |
+| Specialist Agent | Maths Practice Specialist |
+| LLM              | Google Gemini             |
+| Speech-to-Text   | Deepgram                  |
+| Text-to-Speech   | Murf Falcon               |
+| Agent Handoff    | LiveKit Agent Handoff     |
+| Backend          | Python                    |
+| Frontend         | Next.js                   |
+| UI               | React + TypeScript        |
+| Styling          | Tailwind CSS              |
+| Voice Transport  | LiveKit                   |
 
 ---
 
 # 📂 Project Structure
 
 ```text
-Day-8-Call-Analytics-LearnMate/
+Day-9-Maths-Specialist-LearnMate/
 │
 ├── backend/
 │   ├── src/
 │   │   ├── agent.py
 │   │   ├── memory.py
 │   │   ├── learning_tools.py
-│   │   └── analytics.py
-│   │
-│   ├── data/
-│   │   └── call_analytics.json
+│   │   └── maths_specialist.py
 │   │
 │   ├── .env.example
 │   └── pyproject.toml
@@ -334,7 +304,7 @@ Day-8-Call-Analytics-LearnMate/
 
 # ▶️ Running LearnMate
 
-Day 8 continues the same frontend and backend architecture used in the previous days.
+Day 9 continues the same LiveKit-based architecture used throughout the previous days.
 
 ## 1️⃣ Start LiveKit
 
@@ -342,9 +312,7 @@ Day 8 continues the same frontend and backend architecture used in the previous 
 livekit-server.exe --dev
 ```
 
----
-
-## 2️⃣ Start Backend
+## 2️⃣ Start the Backend
 
 ```bash
 cd backend
@@ -352,9 +320,7 @@ uv sync
 uv run python src/agent.py dev
 ```
 
----
-
-## 3️⃣ Start Frontend
+## 3️⃣ Start the Frontend
 
 ```bash
 cd frontend
@@ -362,7 +328,7 @@ pnpm install
 pnpm dev
 ```
 
-Open:
+Open the application at:
 
 ```text
 http://localhost:3000
@@ -370,108 +336,83 @@ http://localhost:3000
 
 ---
 
-# 🧪 Day 8 Testing Checklist
+# 🧪 Testing Checklist
 
-### Test 1 — Start a Voice Call
-
-* ✅ Open LearnMate
-* ✅ Start a voice conversation
-* ✅ Complete a learning interaction
-* ✅ End the call
-* ✅ Check the dashboard
-
----
-
-### Test 2 — Successful Call
+## Test 1 — Normal Conversation
 
 * ✅ Start LearnMate
-* ✅ Ask a Computer Science question
-* ✅ Complete the intended learning objective
-* ✅ End the conversation
-* ✅ Open the Dashboard
-* ✅ Total calls increases
-* ✅ Successful calls increases
-* ✅ Success rate updates
+* ✅ Ask a general learning question
+* ✅ Main agent answers normally
+* ✅ No specialist handoff occurs
 
 ---
 
-### Test 3 — Unsuccessful Call
+## Test 2 — Maths Specialist
 
-* ✅ Start a learning conversation
-* ✅ Do not complete the intended objective
-* ✅ End the conversation
-* ✅ Open the Dashboard
-* ✅ Total calls increases
-* ✅ Unsuccessful calls increases
-
----
-
-### Test 4 — Dashboard
-
-Verify that the dashboard displays:
-
-```text
-📞 Total Calls
-
-✅ Successful Calls
-
-❌ Unsuccessful Calls
-
-📈 Success Rate
-```
+* ✅ Start a voice conversation
+* ✅ Ask a focused mathematics question
+* ✅ Main agent recognises the specialist requirement
+* ✅ Main agent announces the handoff
+* ✅ Maths Specialist takes over
+* ✅ Specialist continues the conversation
 
 ---
 
-# 🎥 Day 8 Demo
+## Test 3 — Context Preservation
 
-The demonstration shows the complete analytics workflow:
+* ✅ Mention the mathematics topic
+* ✅ Explain the problem briefly
+* ✅ Request specialist assistance
+* ✅ Verify that the Maths Specialist receives the relevant context
+* ✅ Continue the conversation without repeating the complete problem
 
-1. 🎙️ Start a voice conversation with LearnMate
-2. 🧠 Ask a Computer Science learning question
-3. 💬 Complete the learning interaction
-4. 🛑 End the call
-5. 📊 Open the Dashboard
-6. 📞 Total calls increase
-7. ✅ Successful calls increase
-8. 📈 Success rate updates
+---
 
-The dashboard provides a simple visual overview of LearnMate's call performance.
+## Test 4 — Specialist Boundaries
+
+* ✅ Ask a general non-mathematics question
+* ✅ Verify that LearnMate handles it directly
+* ✅ Ask a mathematics-focused question
+* ✅ Verify that the Maths Specialist is selected
 
 ---
 
 # 🚀 What I Built
 
-For Day 8, I upgraded LearnMate with a **Call Analytics Dashboard**.
+For Day 9, I taught LearnMate how to **delegate specialised tasks instead of trying to handle everything with a single agent**.
 
-The dashboard gives me a simple way to understand how my voice agent is performing by tracking:
+A dedicated **Maths Practice Specialist** can now take over when the learner needs focused mathematics assistance.
 
-**Total Calls → Successful Calls → Unsuccessful Calls → Success Rate**
+The main agent identifies the need, clearly informs the learner about the handoff, and transfers the conversation while preserving the relevant context.
 
-Instead of only building a voice agent that can have conversations, LearnMate can now also provide visibility into the outcomes of those conversations.
-
-This makes it easier to evaluate the agent and understand whether learners are actually achieving the intended learning objectives.
+This creates a more modular voice-agent architecture and makes it easier to add additional specialists in the future.
 
 ---
 
 # 🔮 Future Improvements
 
-The current dashboard provides the core call metrics.
+The same architecture can be extended with additional specialist agents:
 
-Future versions could include:
+* 🐍 Python Specialist
+* 🧮 DSA Specialist
+* 🗄️ DBMS Specialist
+* 🌐 Computer Networks Specialist
+* ⚙️ Operating Systems Specialist
+* 📚 English Learning Specialist
+* 👨‍🏫 Human Teacher Handoff
+* 📊 Specialist-specific analytics
+* 🌐 Multi-language specialist routing
+* 🧠 Smarter intent-based agent selection
 
-* 📊 Calls over time
-* 📈 Daily / weekly / monthly analytics
-* ⏱️ Average call duration
-* 🧠 Most common learning topics
-* 🎯 Objective completion rate by topic
-* 📞 Call duration analytics
-* 👨‍🏫 Human escalation analytics
-* 🌐 Language-wise analytics
-* 📱 Mobile dashboard
-* 🔔 Real-time analytics
-* 📋 Export analytics as CSV
-* 📊 Interactive charts
-* 🔐 Role-based dashboard access
+---
+
+# 🇮🇳 10 Days of Voice Agents
+
+Built as part of **10 Days of Voice Agents — Voice for Bharat Edition**.
+
+Powered by:
+
+**Murf Falcon • LiveKit • Deepgram • Gemini • Next.js • Python**
 
 ---
 
@@ -479,27 +420,20 @@ Future versions could include:
 
 **Vikas Yadav**
 
-GitHub: [https://github.com/vikasyadav097](https://github.com/vikasyadav097)
+GitHub:
+[https://github.com/vikasyadav097](https://github.com/vikasyadav097)
 
 ---
 
 # 📜 License
 
-MIT License
+This project is licensed under the **MIT License**.
 
 ---
 
-# 🚀 10 Days of Voice Agents
+## 🏷️ Hashtags
 
-Built as part of **10 Days of Voice Agents – Voice for Bharat Edition** 🇮🇳
-
-Powered by:
-
-**Murf Falcon • LiveKit • Deepgram • Gemini • Next.js • Python**
-
-#10DaysofAIVoiceAgents #MurfFalcon #VoiceForBharat #MurfAI #VoiceAI #GenerativeAI #LearningAndLiteracy #ComputerScience #AI #LiveKit #Deepgram #Gemini
+`#10DaysofAIVoiceAgents` `#MurfFalcon` `#VoiceForBharat` `#MurfAI` `#VoiceAI` `#GenerativeAI` `#LearningAndLiteracy` `#Maths` `#AI` `#LiveKit` `#Deepgram` `#Gemini`
 
 ```
-
-**Important:** Maine Day 7 ki escalation-specific cheezein (`create_escalation()`, human teacher flow, reference ID, etc.) hata kar Day 8 ka actual focus **call analytics + dashboard + success/failure tracking** rakha hai.
 ```
